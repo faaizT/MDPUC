@@ -17,6 +17,20 @@ def mdp_computePpolicyPRpolicy(P, R, policy):
     return Ppolicy, PRpolicy
 
 
+def mdp_eval_Q_matrix(P, R, discount, policy):
+    n_states = len(P)
+    n_actions = len(P[0][0])
+    Q = np.zeros((n_states, n_actions))
+    Vpolicy = mdp_eval_policy_matrix(P,R,discount,policy)
+    for s0 in range(n_states):
+        for a0 in range(n_actions):
+            next_state_reward = 0
+            for s1 in range(n_states):
+                next_state_reward += P[s0][s1][a0]*Vpolicy[s1]
+            Q[s0][a0] = R[s0][a0] + discount*next_state_reward
+    return Q
+
+
 def mdp_eval_policy_matrix(P,R,discount,policy):
     n_states = len(P)
     Ppolicy, PRpolicy = mdp_computePpolicyPRpolicy(P, R, policy)
